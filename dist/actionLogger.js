@@ -70,6 +70,8 @@
 "use strict";
 
 
+var logger = __webpack_require__(1);
+
 window.actionLogger = {
     actions: [],
     ignoreKeys: [16, 17, 18],
@@ -100,16 +102,16 @@ window.actionLogger = {
 
     function createAction(e, actionType) {
         return {
+            key: e.key,
+            which: e.which,
+            type: e.type,
             event: e,
             element: e.target,
             actionType: actionType,
-            type: e.type,
             elementId: e.target.id,
             elementClasses: e.target.classList,
             elementTagName: e.target.tagName,
             elementType: e.target.type,
-            key: e.key,
-            which: e.which,
             altKey: e.altKey,
             ctrlKey: e.ctrlKey,
             shiftKey: e.shiftKey,
@@ -248,9 +250,36 @@ window.actionLogger = {
     window.testing3 = addListener(document, "keypress");
 
     actionLogger.listen(function (action) {
-        console.log(action);
+        logger.log(action);
     });
+
+    logger.log('action-logger loaded successfully');
 })();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = {
+    log: function log(text) {
+        if (true) {
+            console.log(text);
+        }
+    },
+    warn: function warn(text) {
+        if (true) {
+            console.warn(text);
+        }
+    },
+    error: function error(text) {
+        if (true) {
+            console.error(text);
+        }
+    }
+};
 
 /***/ })
 /******/ ]);

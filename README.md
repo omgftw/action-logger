@@ -11,5 +11,6 @@ actionLogger.listen(function(action) {
 ## Goals
 - [ ] Record user keyboard and mouse input (Actions)  
 - [ ] JSON serializable actions with all necessary information  
+- [ ] XPath information for each action
 - [ ] Human-readable output of all actions  
 - [ ] Extensibility  

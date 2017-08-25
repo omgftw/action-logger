@@ -1,3 +1,5 @@
+var logger = require('./logger.js');
+
 window.actionLogger = {
     actions: [],
     ignoreKeys: [16, 17, 18],
@@ -28,16 +30,16 @@ window.actionLogger = {
 
     function createAction(e, actionType) {
         return {
+            key: e.key,
+            which: e.which,
+            type: e.type,
             event: e,
             element: e.target,
             actionType: actionType,
-            type: e.type,
             elementId: e.target.id,
             elementClasses: e.target.classList,
             elementTagName: e.target.tagName,
             elementType: e.target.type,
-            key: e.key,
-            which: e.which,
             altKey: e.altKey,
             ctrlKey: e.ctrlKey,
             shiftKey: e.shiftKey,
@@ -185,7 +187,8 @@ window.actionLogger = {
     window.testing3 = addListener(document, "keypress");
 
     actionLogger.listen(action => {
-        console.log(action);
+        logger.log(action);
     })
 
+    logger.log('action-logger loaded successfully');
 })();

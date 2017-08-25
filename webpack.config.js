@@ -1,3 +1,6 @@
+var webpack = require('webpack');
+var path = require('path');
+
 var babelOptions = {
     "presets": [
         [
@@ -13,7 +16,7 @@ var babelOptions = {
 module.exports = {
     entry: "./index.js",
     output: {
-        path: __dirname,
+        path: path.join(__dirname, 'dist'),
         filename: "actionLogger.js"
     },
     module: {
@@ -45,5 +48,10 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js']
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            DEBUG_MODE: JSON.stringify(true)
+        })
+    ]
 };
