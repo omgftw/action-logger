@@ -1,76 +1,4 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var logger = __webpack_require__(1);
+var logger = require('./logger.js');
 
 window.actionLogger = {
   actions: [],
@@ -82,17 +10,17 @@ window.actionLogger = {
 (function () {
   //calls correct handling code dependent on factors such as tag type
   function dispatch(e) {
-    var keyupIgnore = ["INPUT", "TEXTAREA"];
+    let keyupIgnore = ["INPUT", "TEXTAREA"];
     if (e.type === "keyup" && keyupIgnore.indexOf(e.target.tagName) === -1 && !e.repeat) {
       return handleKeyUp(e);
     }
 
-    var keydownIgnore = ["INPUT", "TEXTAREA"];
+    let keydownIgnore = ["INPUT", "TEXTAREA"];
     if (e.type === "keydown" && keydownIgnore.indexOf(e.target.tagName) === -1 && !e.repeat) {
       return handleKeyDown(e);
     }
 
-    var keypressTargets = ["INPUT", "TEXTAREA"];
+    let keypressTargets = ["INPUT", "TEXTAREA"];
     if (e.type === "keypress" && keypressTargets.indexOf(e.target.tagName) !== -1) {
       return handleKeyPress(e);
     }
@@ -117,8 +45,10 @@ window.actionLogger = {
     };
   }
 
+
+
   function handleKeyDown(e) {
-    var action = createAction(e, "keyboard");
+    let action = createAction(e, "keyboard");
 
     //prevent capture of passwords
     if (e.target.type === "password") {
@@ -132,7 +62,7 @@ window.actionLogger = {
   }
 
   function handleKeyUp(e) {
-    var action = createAction(e, "keyboard");
+    let action = createAction(e, "keyboard");
 
     //prevent capture of passwords
     if (e.target.type === "password") {
@@ -150,7 +80,7 @@ window.actionLogger = {
       return;
     }
 
-    var action = createAction(e, "keyboard");
+    let action = createAction(e, "keyboard");
 
     //prevent capture of passwords
     if (e.target.type === "password") {
@@ -163,6 +93,7 @@ window.actionLogger = {
     emitEvent(action);
   }
 
+
   //Adds a js event listener that will be handled by actionLogger
   function addListener(element, eventType) {
     //if passed arg is a string, assume it's a css selector
@@ -174,18 +105,20 @@ window.actionLogger = {
     element.addEventListener(eventType, dispatch);
 
     //return an event listener cancel function
-    return function () {
+    return () => {
       element.removeEventListener(eventType, dispatch);
     };
   }
 
   //calls all attached listener callbacks
   function emitEvent(action) {
-    var handlers = actionLogger.eventHandlers;
+    let handlers = actionLogger.eventHandlers;
     for (var i = 0; i < handlers.length; i++) {
       handlers[i](action);
     }
   }
+
+
 
   actionLogger.getActions = function () {
     return actionLogger.actions;
@@ -251,37 +184,9 @@ window.actionLogger = {
   window.testing2 = addListener(document, "keyup");
   window.testing3 = addListener(document, "keypress");
 
-  actionLogger.listen(function (action) {
+  actionLogger.listen(action => {
     logger.log(action);
-  });
+  })
 
   logger.log('action-logger loaded successfully');
 })();
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = {
-  log: function log(text) {
-    if (false) {
-      console.log(text);
-    }
-  },
-  warn: function warn(text) {
-    if (false) {
-      console.warn(text);
-    }
-  },
-  error: function error(text) {
-    if (false) {
-      console.error(text);
-    }
-  }
-};
-
-/***/ })
-/******/ ]);

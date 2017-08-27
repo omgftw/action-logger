@@ -51,7 +51,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            DEBUG_MODE: JSON.stringify(false)
+            DEBUG_MODE: JSON.stringify(true)
         })
     ]
 };
