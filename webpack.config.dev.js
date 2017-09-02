@@ -53,5 +53,6 @@ module.exports = {
         new webpack.DefinePlugin({
             DEBUG_MODE: JSON.stringify(true)
         })
-    ]
+    ],
+    devtool: 'source-map'
 };

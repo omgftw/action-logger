@@ -75,8 +75,8 @@ var logger = __webpack_require__(1);
 window.actionLogger = {
   actions: [],
   ignoreKeys: [16, 17, 18],
-  eventHandlers: []
-  // keyUpElements: []
+  eventHandlers: [],
+  defaultListeners: []
 };
 
 (function () {
@@ -96,11 +96,14 @@ window.actionLogger = {
     if (e.type === "keypress" && keypressTargets.indexOf(e.target.tagName) !== -1) {
       return handleKeyPress(e);
     }
+
+    if (e.type === "mousedown" || e.type === "mouseup") {
+      return handleMouse(e);
+    }
   }
 
   function createAction(e, actionType) {
-    return {
-      key: e.key,
+    var action = {
       which: e.which,
       type: e.type,
       event: e,
@@ -115,6 +118,25 @@ window.actionLogger = {
       shiftKey: e.shiftKey,
       date: new Date()
     };
+
+    if (actionType === "keyboard") {
+      action.key = e.key;
+    }
+
+    if (actionType === "mouse") {
+      action.clientX = e.clientX;
+      action.clientY = e.clientY;
+      action.layerX = e.layerX;
+      action.layerY = e.layerY;
+      action.offsetX = e.offsetX;
+      action.offsetY = e.offsetY;
+      action.pageX = e.pageX;
+      action.pageY = e.pageY;
+      action.screenX = e.pageY;
+      action.screenY = e.pageY;
+    }
+
+    return action;
   }
 
   function handleKeyDown(e) {
@@ -157,6 +179,23 @@ window.actionLogger = {
       action.key = "*";
       action.which = 42;
     }
+
+    actionLogger.actions.push(action);
+
+    emitEvent(action);
+  }
+
+  function handleMouse(e) {
+    var action = createAction(e, "mouse");
+
+    actionLogger.actions.push(action);
+
+    emitEvent(action);
+  }
+
+  //TBI
+  function handleOther(e) {
+    var action = createAction(e, "");
 
     actionLogger.actions.push(action);
 
@@ -247,9 +286,11 @@ window.actionLogger = {
   //   return consolidatedActions;
   // };
 
-  window.testing1 = addListener(document, "keydown");
-  window.testing2 = addListener(document, "keyup");
-  window.testing3 = addListener(document, "keypress");
+  actionLogger.defaultListeners.push(addListener(document, "keydown"));
+  actionLogger.defaultListeners.push(addListener(document, "keyup"));
+  actionLogger.defaultListeners.push(addListener(document, "keypress"));
+  actionLogger.defaultListeners.push(addListener(document, "mousedown"));
+  actionLogger.defaultListeners.push(addListener(document, "mouseup"));
 
   actionLogger.listen(function (action) {
     logger.log(action);
