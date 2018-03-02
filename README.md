@@ -39,13 +39,13 @@ Install NPM packages
 ```
 npm install
 ```
-Install webpack globally
+Install webpack-cli globally
 ```
-npm install -g webpack
+npm install -g webpack-cli
 ```  
-Run webpack
+Run webpack-cli
 ```
-webpack
+webpack-cli
 ```
 The built files can be found in dist/
 
